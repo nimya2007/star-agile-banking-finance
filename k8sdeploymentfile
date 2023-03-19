@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nimya-bank-app-deploy
+  labels:
+    app: nimya-bank-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nimya-bank-app
+  template:
+    metadata:
+      labels:
+        app: nimya-bank-app
+    spec:
+      containers:
+      - name: nimya-bank-app-container
+        image: nimya/bank_app
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nimya-bank-np-service
+  labels:
+    app: nimya-bank-app
+spec:
+  selector:
+    app: nimya-bank-app
+
+  type: NodePort
+  ports:
+  - nodePort: 31001
+    port: 8080
+    targetPort: 8081
